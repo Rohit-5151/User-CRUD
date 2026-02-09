@@ -1,8 +1,36 @@
-import axios from "axios";
+const STORAGE_KEY = "users";
 
-const API_URL = "http://localhost:5000/users";
+const getStoredUsers = () => {
+  return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+};
 
-export const getUsers = () => axios.get(API_URL);
-export const createUser = (user) => axios.post(API_URL, user);
-export const updateUser = (id, user) => axios.put(`${API_URL}/${id}`, user);
-export const deleteUser = (id) => axios.delete(`${API_URL}/${id}`);
+const saveUsers = (users) => {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(users));
+};
+
+export const getUsers = () => {
+  return Promise.resolve({
+    data: getStoredUsers()
+  });
+};
+
+export const createUser = (user) => {
+  const users = getStoredUsers();
+  const newUser = { ...user, id: Date.now() };
+  saveUsers([...users, newUser]);
+  return Promise.resolve(newUser);
+};
+
+export const updateUser = (id, updatedUser) => {
+  const users = getStoredUsers().map(user =>
+    user.id === id ? { ...updatedUser, id } : user
+  );
+  saveUsers(users);
+  return Promise.resolve();
+};
+
+export const deleteUser = (id) => {
+  const users = getStoredUsers().filter(user => user.id !== id);
+  saveUsers(users);
+  return Promise.resolve();
+};
