@@ -6,23 +6,19 @@ The app is designed with future extensibility in mind, allowing new fields to be
 1. Setup Instructions
     npm install
 
-2. Start Mock API (JSON Server)
-    Ensure db.json exists in the project root.
-    json-server --watch db.json --port 5000
-
-3. Start React App
+2. Start React App
     npm start
 
-4. The app will be available at:
+3. The app will be available at:
     http://localhost:3000
 
-5. Production Build
+4. Production Build
     npm run build
 
-Adding New Fields (Extensibility)
-The form and table are schema-driven.
-To add a new field (e.g. Date of Birth or Address):
-src/config/userSchema.js
+Data Persistence (LocalStorage)
+    All user data is stored in browser LocalStorage
+    Data persists across page refreshes
+    Data is browser-specific and will be cleared if LocalStorage is manually cleared
 
 Add a new field configuration:
 {
@@ -33,15 +29,16 @@ Add a new field configuration:
 }
 
 Design Decisions & Assumptions
-  Schema-based UI rendering was chosen to ensure easy extensibility.
-  JSON Server is used as a mock backend to simulate real REST APIs.
-  Axios is isolated in a service layer for clean separation of concerns.
-  Basic client-side validation is handled centrally in the form component.
-  The app assumes a REST-style API with standard CRUD endpoints.
-  Styling uses Bootstrap for simplicity and responsiveness.
+  Schema-based form rendering was chosen to support easy extensibility.
+    LocalStorage is used instead of a backend API to:
+    Avoid deployment issues
+    Enable frontend-only hosting (Netlify, Vercel, GitHub Pages)
+    Simplify demo and assignment evaluation
+    CRUD logic is abstracted via a service layer to allow future backend integration with minimal changes.
+    Basic client-side validation is handled centrally in the form component.
+    Bootstrap is used for clean, responsive UI with minimal setup.
 
 Technologies Used
   React (Hooks)
-  Axios
-  JSON Server
+  Browser LocalStorage
   Bootstrap
